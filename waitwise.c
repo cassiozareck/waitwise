@@ -20,11 +20,11 @@ typedef struct {
        NODO* fim;         // ponteiro para o fim da estrutura
 } dNODO;                  // com descritor
 
-
 /***********************************************/ 
 /* Definição das Funções                       */
 /***********************************************/ 
 void entradaDados(int *ciclos, int *ciclo);
+void inicializaFila(dNODO **filaClientes);
 
 int main(){
     int ciclo = 0;  //Tempo de simulação
@@ -32,6 +32,7 @@ int main(){
     entradaDados(&ciclos, &ciclo);
     dNODO *filaClientes;
     inicializaFila(&filaClientes);
+
 
 }
 void entradaDados(int *ciclos, int *ciclo){
@@ -43,6 +44,7 @@ void entradaDados(int *ciclos, int *ciclo){
     printf("Insira a quantidade de entrada de clientes na fila (por ciclo): ");
     scanf("%i", &(*ciclo));
 }
-inicializaFila(){
-       
+void inicializaFila(dNODO **filaClientes){
+       (*filaClientes)->inicio = NULL; //inicializa cabeça da fista
+       (*filaClientes)->fim = NULL;    //inicializa cauda da fila
 }
