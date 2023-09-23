@@ -3,6 +3,7 @@
 /***********************************************/ 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 /***********************************************/ 
 /* Definição dos Registros                     */
 /***********************************************/ 
@@ -107,5 +108,6 @@ void simulacao(int *velocidade, int *ciclos, int *ciclo, dNODO **filaClientes){
 }
 //esta funcao deve retornar um numero aleatorio, que representará a velocidade com que os clientes saem da fila
 int velocidadeDeAtendimento(){
-    
+    srand(time(NULL));
+    return (rand() % 6 + 1);
 }
