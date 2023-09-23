@@ -26,6 +26,7 @@ typedef struct {
 void entradaDados(int *ciclos, int *ciclo);
 void inicializaFila(dNODO **filaClientes);
 void insereNaFila(dNODO **filaClientes);
+void retiraDaFila();
 
 int main(){
     int ciclo = 0;  //Tempo de simulação
