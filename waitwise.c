@@ -24,31 +24,30 @@ typedef struct {
 /***********************************************/ 
 /* Definição das Funções                       */
 /***********************************************/ 
-void entradaDados(int *ciclos, int *ciclo);
+void entradaDados(int *ciclos, int *clientesPorCiclo);
 void inicializaFila(dNODO **filaClientes);
-void insereNaFila(dNODO **filaClientes);
-void retiraDaFila(dNODO **filaClientes);
+void insereNaFila(dNODO **filaClientes, int numeroDoCliente);
+int retiraDaFila(dNODO **filaClientes);
 int velocidadeDeAtendimento();
+void simulacao(int *velocidade, int *ciclos, int *clientesPorCiclo, dNODO **filaClientes);
 
 int main(){
-    int ciclo = 0;  //Tempo de simulação
-    int ciclos = 0; //Quantidade de entrada de clientes na fila
-    entradaDados(&ciclos, &ciclo);
+    int clientesPorCiclo = 0;  //numero de clientes que entram por ciclo de simulação
+    int ciclos = 0; //Quantidade de simulações de entrada de clientes
+    entradaDados(&ciclos, &clientesPorCiclo);
     dNODO *filaClientes;
     inicializaFila(&filaClientes);
     int velocidade = velocidadeDeAtendimento();
-    simulacao(&velocidade, &ciclos, &ciclo, &filaClientes);
-    insereNaFila(&filaClientes);//tirar daqui
-    retiraDaFila(&filaClientes);//tirar daqui
+    simulacao(&velocidade, &ciclos, &clientesPorCiclo, &filaClientes);
 }
-void entradaDados(int *ciclos, int *ciclo){
+void entradaDados(int *ciclos, int *clientesPorCiclo){
     printf("##########################  Bem-vindo ao WaitWise  ##########################");
     printf(" \n");
     printf(" \n");
     printf("\nInsira a quantidade de simualção (ciclos).....................: ");
     scanf("%i", &(*ciclos));
     printf("Insira a quantidade de entrada de clientes na fila (por ciclo): ");
-    scanf("%i", &(*ciclo));
+    scanf("%i", &(*clientesPorCiclo));
 }
 void inicializaFila(dNODO **filaClientes){
     dNODO *ptDescritor = (dNODO*) malloc(sizeof(dNODO));
@@ -61,11 +60,12 @@ void inicializaFila(dNODO **filaClientes){
        return;
     }
 }
-//insere registro no fim da fila
-void insereNaFila(dNODO **filaClientes){
+//recebe a fila e o numero do clinte que esta entrando na fila. Insere este cliente na fila
+void insereNaFila(dNODO **filaClientes, int numeroDoCliente){
     NODO *novo = (NODO*) malloc(sizeof(NODO));
     if(novo != NULL){ //se ouver espaço suficiente na memoria para criar um novo nodo
        if((*filaClientes)->fim == NULL){//Se a fila não possuir nodo algum
+           novo->info.cliente = numeroDoCliente;
            (*filaClientes)->fim = novo;
            (*filaClientes)->inicio = novo;
            novo->prox = NULL;
@@ -79,12 +79,15 @@ void insereNaFila(dNODO **filaClientes){
         return;
     }
 }
-void retiraDaFila(dNODO **filaClientes){
+//retorna 0 caso ocorra um erro
+int retiraDaFila(dNODO **filaClientes){
+    int numeroDoClienteQueSaiu;
     if((*filaClientes)->inicio == NULL){
         printf("A fila não possui nodos!");
-        return;
+        return 0;
     }else{
         if((*filaClientes)->inicio->prox == NULL){//se tiver somente um nodo
+            numeroDoClienteQueSaiu = (*filaClientes)->inicio->info.cliente;
             free((*filaClientes)->inicio); //libera espaço de memoria do unico nodo
             (*filaClientes)->inicio = NULL;
             (*filaClientes)->fim = NULL;
@@ -92,19 +95,38 @@ void retiraDaFila(dNODO **filaClientes){
             NODO *aux = (NODO*) malloc(sizeof(NODO));
             if(aux == NULL){
                 printf("Espaço de memoria insuficiente!");
-                return;
+                return 0;
             }else{
+                numeroDoClienteQueSaiu = (*filaClientes)->inicio->info.cliente;
                 aux = (*filaClientes)->inicio;
                 (*filaClientes)->inicio = (*filaClientes)->inicio->prox;
                 free(aux);
             }
         }
     }
+    return ( numeroDoClienteQueSaiu );
 }
 //esta função deve fazer a simulação de uma fila de supermercado, mostrando os ciclos de entrada de clientes,
 //a saida dos clientes e por fim deve apresentar os resuldados da simulação, isto é, as estatisticas
-void simulacao(int *velocidade, int *ciclos, int *ciclo, dNODO **filaClientes){
-
+void simulacao(int *velocidade, int *ciclos, int *clientesPorCiclo, dNODO **filaClientes){
+    int clientes = 0; //conta numero de clientes que entraram
+    int ciclosExecutados = 0; //conta o numero de ciclos executados após a ultima saida de um cliente, ou seja, sempre é zerado depois da saida de um cliente
+    int i, j, clienteQueSaiu;
+    for(i = 0; i < *ciclos; i++){
+        printf("\nCiclo[%i]", i+1);
+        for(j = 0; j < *clientesPorCiclo; j++){
+            insereNaFila(filaClientes, j+1);
+            printf("\nEntrou na fila o cliente: %i", clientes+1);
+            clientes++;
+        }
+        ciclosExecutados++;
+        if (ciclosExecutados == *velocidade){ //verifica se esta na hora de tirar alguem da fila, conforme velocidade definida pela funcao velocidadeDeAtendimento
+            clienteQueSaiu = retiraDaFila(filaClientes);
+            printf("\nSaiu o cliente %i", clienteQueSaiu);
+            ciclosExecutados = 0;
+        }
+    }
+    printf("\n");
 }
 //esta funcao deve retornar um numero aleatorio, que representará a velocidade com que os clientes saem da fila
 int velocidadeDeAtendimento(){
