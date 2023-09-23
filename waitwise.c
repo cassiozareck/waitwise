@@ -26,7 +26,8 @@ typedef struct {
 void entradaDados(int *ciclos, int *ciclo);
 void inicializaFila(dNODO **filaClientes);
 void insereNaFila(dNODO **filaClientes);
-void retiraDaFila();
+void retiraDaFila(dNODO **filaClientes);
+int velocidadeDeAtendimento();
 
 int main(){
     int ciclo = 0;  //Tempo de simulação
@@ -34,8 +35,10 @@ int main(){
     entradaDados(&ciclos, &ciclo);
     dNODO *filaClientes;
     inicializaFila(&filaClientes);
-    insereNaFila(&filaClientes);
-    retiraDaFila(&filaClientes);
+    int velocidade = velocidadeDeAtendimento();
+    simulacao(&velocidade, &ciclos, &ciclo, &filaClientes);
+    insereNaFila(&filaClientes);//tirar daqui
+    retiraDaFila(&filaClientes);//tirar daqui
 }
 void entradaDados(int *ciclos, int *ciclo){
     printf("##########################  Bem-vindo ao WaitWise  ##########################");
@@ -96,4 +99,13 @@ void retiraDaFila(dNODO **filaClientes){
             }
         }
     }
+}
+//esta função deve fazer a simulação de uma fila de supermercado, mostrando os ciclos de entrada de clientes,
+//a saida dos clientes e por fim deve apresentar os resuldados da simulação, isto é, as estatisticas
+void simulacao(int *velocidade, int *ciclos, int *ciclo, dNODO **filaClientes){
+
+}
+//esta funcao deve retornar um numero aleatorio, que representará a velocidade com que os clientes saem da fila
+int velocidadeDeAtendimento(){
+    
 }
