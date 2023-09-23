@@ -35,6 +35,7 @@ int main(){
     dNODO *filaClientes;
     inicializaFila(&filaClientes);
     insereNaFila(&filaClientes);
+    retiraDaFila(&filaClientes);
 }
 void entradaDados(int *ciclos, int *ciclo){
     printf("##########################  Bem-vindo ao WaitWise  ##########################");
@@ -72,5 +73,27 @@ void insereNaFila(dNODO **filaClientes){
     }else{
         printf("Espaço de memoria insuficiente!");
         return;
+    }
+}
+void retiraDaFila(dNODO **filaClientes){
+    if((*filaClientes)->inicio == NULL){
+        printf("A fila não possui nodos!");
+        return;
+    }else{
+        if((*filaClientes)->inicio->prox == NULL){//se tiver somente um nodo
+            free((*filaClientes)->inicio); //libera espaço de memoria do unico nodo
+            (*filaClientes)->inicio = NULL;
+            (*filaClientes)->fim = NULL;
+        }else{
+            NODO *aux = (NODO*) malloc(sizeof(NODO));
+            if(aux == NULL){
+                printf("Espaço de memoria insuficiente!");
+                return;
+            }else{
+                aux = (*filaClientes)->inicio;
+                (*filaClientes)->inicio = (*filaClientes)->inicio->prox;
+                free(aux);
+            }
+        }
     }
 }
