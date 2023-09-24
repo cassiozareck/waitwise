@@ -48,6 +48,12 @@ void entradaDados(int *ciclos, int *clientesPorCiclo){
     scanf("%i", &(*ciclos));
     printf("        Insira a quantidade de entrada de clientes na fila (por ciclo): ");
     scanf("%i", &(*clientesPorCiclo));
+
+    // ambos inputs não podem ser menores que 0, caso contrário um erro de core dump será gerado
+    if ((*ciclos) < 0 || (*clientesPorCiclo) < 0) {
+        printf("\t\nPor favor entre com um número de inputs válido na próxima vez! \n");
+        exit(EXIT_FAILURE);
+    } 
 }
 void inicializaFila(dNODO **filaClientes){
     dNODO *ptDescritor = (dNODO*) malloc(sizeof(dNODO));
